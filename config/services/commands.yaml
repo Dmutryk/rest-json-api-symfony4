@@ -1,0 +1,15 @@
+# config/services/commands.yaml
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  App\Command\:
+    resource: '../../src/Command'
+
+  app.command.create_user:
+    class: App\Command\CreateUserCommand
+    tags:
+      -  { name: console.command }

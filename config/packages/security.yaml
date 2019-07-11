@@ -1,0 +1,22 @@
+security:
+
+  encoders:
+    App\Entity\User:
+      algorithm: bcrypt
+      cost: 13
+
+  role_hierarchy:
+    ROLE_USER: ROLE_USER
+    ROLE_ADMIN: ROLE_USER
+
+  providers:
+    jwt_user_provider:
+      id: App\Security\JwtUserProvider
+
+  firewalls:
+    jwt:
+      pattern: ^/api
+      stateless: true
+      simple_preauth:
+        authenticator: App\Security\JwtUserAuthenticator
+      provider: jwt_user_provider
