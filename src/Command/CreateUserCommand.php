@@ -13,9 +13,22 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class CreateUserCommand extends Command
 {
+    /**
+     * @var \Doctrine\ORM\EntityManagerInterface
+     */
     private $entityManager;
+
+    /**
+     * @var \Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface
+     */
     private $userPasswordEncoder;
 
+    /**
+     * CreateUserCommand constructor.
+     *
+     * @param \Doctrine\ORM\EntityManagerInterface $entityManager
+     * @param \Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface $userPasswordEncoder
+     */
     public function __construct(
         EntityManagerInterface $entityManager,
         UserPasswordEncoderInterface $userPasswordEncoder
@@ -51,6 +64,12 @@ class CreateUserCommand extends Command
             );
     }
 
+    /**
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @return int|void|null
+     * @throws \Exception
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $password = bin2hex(random_bytes(16));
@@ -59,6 +78,10 @@ class CreateUserCommand extends Command
         $this->outputCredentials($output, $input->getOption('username'), $password);
     }
 
+    /**
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param $password
+     */
     private function createUser(InputInterface $input, $password)
     {
         $user = new User();
@@ -72,6 +95,11 @@ class CreateUserCommand extends Command
         $this->entityManager->flush();
     }
 
+    /**
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param $username
+     * @param $password
+     */
     private function outputCredentials(OutputInterface $output, $username, $password)
     {
         $output->writeln(PHP_EOL.'CREDENTIALS');

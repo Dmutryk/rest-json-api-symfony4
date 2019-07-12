@@ -4,8 +4,8 @@ imports:
 parameters:
     jwt_ttl: '+1 hour'
     jwt_algorithm: 'RS256'
-    jwt_private_key: '%kernel.project_dir%/rsa_256.pem'
-    jwt_public_key: '%kernel.project_dir%/rsa_256.pub'
+    jwt_private_key: '%kernel.project_dir%/id_rsa_jwt.pem'
+    jwt_public_key: '%kernel.project_dir%/id_rsa_jwt.pub'
 
 services:
     _defaults:

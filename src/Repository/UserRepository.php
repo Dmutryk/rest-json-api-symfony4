@@ -11,9 +11,22 @@ use Doctrine\ORM\Query;
 
 class UserRepository implements UserRepositoryInterface
 {
+    /**
+     * @var \Doctrine\ORM\EntityManagerInterface
+     */
     private $entityManager;
+
+    /**
+     * @var \Doctrine\ORM\EntityRepository
+     */
     private $entityRepository;
 
+    /**
+     * UserRepository constructor.
+     *
+     * @param \Doctrine\ORM\EntityManagerInterface $entityManager
+     * @param \Doctrine\ORM\EntityRepository $entityRepository
+     */
     public function __construct(
         EntityManagerInterface $entityManager,
         EntityRepository $entityRepository
@@ -22,6 +35,11 @@ class UserRepository implements UserRepositoryInterface
         $this->entityRepository = $entityRepository;
     }
 
+    /**
+     * @param string $id
+     * @return \App\Entity\User|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function findOneActiveById(string $id): ?User
     {
         return $this->entityRepository
@@ -33,6 +51,11 @@ class UserRepository implements UserRepositoryInterface
             ->getOneOrNullResult(Query::HYDRATE_SIMPLEOBJECT);
     }
 
+    /**
+     * @param string $username
+     * @return \App\Entity\User|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function findOneActiveByUsername(string $username): ?User
     {
         return $this->entityRepository

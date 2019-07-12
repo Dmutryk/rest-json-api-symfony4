@@ -18,12 +18,40 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class LoginController
 {
+    /**
+     * @var \App\Repository\UserRepositoryInterface
+     */
     private $userRepository;
+
+    /**
+     * @var \Doctrine\ORM\EntityManagerInterface
+     */
     private $entityManager;
+
+    /**
+     * @var \Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface
+     */
     private $userPasswordEncoder;
+
+    /**
+     * @var \App\Util\JwtUtilInterface
+     */
     private $jwtUtil;
+
+    /**
+     * @var string
+     */
     private $jwtTtl;
 
+    /**
+     * LoginController constructor.
+     *
+     * @param \App\Repository\UserRepositoryInterface $userRepository
+     * @param \Doctrine\ORM\EntityManagerInterface $entityManager
+     * @param \Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface $userPasswordEncoder
+     * @param \App\Util\JwtUtilInterface $jwtUtil
+     * @param string $jwtTtl
+     */
     public function __construct(
         UserRepositoryInterface $userRepository,
         EntityManagerInterface $entityManager,
@@ -38,6 +66,11 @@ class LoginController
         $this->jwtTtl = $jwtTtl;
     }
 
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
+     */
     public function login(Request $request): Response
     {
         $data = json_decode($request->getContent(), true);

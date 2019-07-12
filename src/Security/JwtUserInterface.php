@@ -8,5 +8,8 @@ use App\Entity\User;
 
 interface JwtUserInterface
 {
+    /**
+     * @return \App\Entity\User
+     */
     public function get(): User;
 }

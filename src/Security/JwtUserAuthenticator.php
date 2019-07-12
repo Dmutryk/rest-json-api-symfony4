@@ -22,13 +22,26 @@ use Symfony\Component\Security\Http\Authentication\SimplePreAuthenticatorInterfa
 
 class JwtUserAuthenticator implements SimplePreAuthenticatorInterface, AuthenticationFailureHandlerInterface
 {
+    /**
+     * @var \App\Util\JwtUtilInterface
+     */
     private $jwtUtil;
 
+    /**
+     * JwtUserAuthenticator constructor.
+     *
+     * @param \App\Util\JwtUtilInterface $jwtUtil
+     */
     public function __construct(JwtUtilInterface $jwtUtil)
     {
         $this->jwtUtil = $jwtUtil;
     }
 
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param $providerKey
+     * @return \Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken
+     */
     public function createToken(Request $request, $providerKey)
     {
         $token = $request->headers->get('Authorization');
@@ -39,11 +52,23 @@ class JwtUserAuthenticator implements SimplePreAuthenticatorInterface, Authentic
         return new PreAuthenticatedToken('anon.', $token, $providerKey);
     }
 
+    /**
+     * @param \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token
+     * @param $providerKey
+     * @return bool
+     */
     public function supportsToken(TokenInterface $token, $providerKey)
     {
         return $token instanceof PreAuthenticatedToken && $token->getProviderKey() === $providerKey;
     }
 
+    /**
+     * @param \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token
+     * @param \Symfony\Component\Security\Core\User\UserProviderInterface $userProvider
+     * @param $providerKey
+     * @return \Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken
+     * @throws \Exception
+     */
     public function authenticateToken(TokenInterface $token, UserProviderInterface $userProvider, $providerKey)
     {
         if (!$userProvider instanceof JwtUserProvider) {
@@ -60,16 +85,32 @@ class JwtUserAuthenticator implements SimplePreAuthenticatorInterface, Authentic
         return new PreAuthenticatedToken($user, $user->getUsername(), $providerKey, $user->getRoles());
     }
 
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Symfony\Component\Security\Core\Exception\AuthenticationException $exception
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
         return new Response($exception->getMessageKey(), Response::HTTP_UNAUTHORIZED);
     }
 
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token
+     * @param $providerKey
+     * @return null
+     */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
         return null;
     }
 
+    /**
+     * @param \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token
+     * @return \stdClass
+     * @throws \Exception
+     */
     private function validateToken(TokenInterface $token): stdClass
     {
         preg_match('/^Bearer\s(\S+)/i', $token->getCredentials(), $matches);
