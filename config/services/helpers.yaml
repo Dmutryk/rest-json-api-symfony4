@@ -1,0 +1,21 @@
+# config/services/helpers.yaml
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  App\Helpers\:
+    resource: '../../src/Helpers'
+
+  App\Helpers\JwtHelper:
+    arguments:
+      $jwtAlgorithm: '%jwt_algorithm%'
+      $jwtPrivateKey: '%jwt_private_key%'
+      $jwtPublicKey: '%jwt_public_key%'
+
+  App\Helpers\TokenGeneratorHelper:
+    arguments:
+      $jwtTimelife: '%jwt_timelife%'
+      $jwtRefreshTimelife: '%jwt_refresh_timelife%'

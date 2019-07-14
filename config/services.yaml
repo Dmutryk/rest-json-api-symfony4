@@ -2,10 +2,11 @@ imports:
     - { resource: services/* }
 
 parameters:
-    jwt_ttl: '+1 hour'
+    jwt_timelife: '+1 hour'
+    jwt_refresh_timelife: '+60 days'
     jwt_algorithm: 'RS256'
-    jwt_private_key: '%kernel.project_dir%/id_rsa_jwt.pem'
-    jwt_public_key: '%kernel.project_dir%/id_rsa_jwt.pub'
+    jwt_private_key: '%kernel.project_dir%/rsa_256.pem'
+    jwt_public_key: '%kernel.project_dir%/rsa_256.pub'
 
 services:
     _defaults:
@@ -15,4 +16,4 @@ services:
 
     App\:
         resource: '../src/*'
-        exclude: '../src/{Entity,Command,Controller,Repository,Security,Migrations,Service,Util,Kernel.php}'
+        exclude: '../src/{Entity,Command,Controller,Repository,Auth,Migrations,Service,Helpers,Kernel.php}'

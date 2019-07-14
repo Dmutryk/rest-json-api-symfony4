@@ -1,9 +1,19 @@
-home:
+general:
   path: /
   methods: [GET]
-  controller: App\Controller\HomeController::home
+  controller: App\Controller\GeneralController::index
 
-login:
-  path: /login
+getToken:
+  path: /getToken
   methods: [POST]
-  controller: App\Controller\LoginController::login
+  controller: App\Controller\LoginController::getToken
+
+refreshTokens:
+  path: /refresh-tokens
+  methods: [POST]
+  controller: App\Controller\TokenController::refreshTokens
+
+disableTokens:
+  path: /disable-tokens
+  methods: [POST]
+  controller: App\Controller\TokenController::disableTokens

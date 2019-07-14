@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Security\JwtUserInterface;
+use App\Auth\JwtUserInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,14 +15,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class SecretRouteController
 {
     /**
-     * @var \App\Security\JwtUserInterface
+     * @var \App\Auth\JwtUserInterface
      */
     private $jwtUser;
 
     /**
      * SecretRouteController constructor.
      *
-     * @param \App\Security\JwtUserInterface $jwtUser
+     * @param \App\Auth\JwtUserInterface $jwtUser
      */
     public function __construct(JwtUserInterface $jwtUser)
     {

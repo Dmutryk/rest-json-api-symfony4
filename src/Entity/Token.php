@@ -25,11 +25,6 @@ class Token
     private $data;
 
     /**
-     * @ORM\Column(name="created_at", type="string", length=30, nullable=false)
-     */
-    private $createdAt;
-
-    /**
      * @ORM\Column(name="expires_at", type="string", length=30, nullable=false)
      */
     private $expiresAt;
@@ -62,18 +57,6 @@ class Token
     public function getData(): string
     {
         return $this->data;
-    }
-
-    public function setCreatedAt(string $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): string
-    {
-        return $this->createdAt;
     }
 
     public function setExpiresAt(string $expiresAt): self

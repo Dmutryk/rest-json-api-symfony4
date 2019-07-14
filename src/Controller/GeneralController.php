@@ -6,13 +6,13 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 
-class HomeController
+class GeneralController
 {
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function home(): Response
+    public function index(): Response
     {
-        return new Response('Welcome to the API application.');
+        return new Response('To get your tokens send your credentials to `/getToken` page.');
     }
 }

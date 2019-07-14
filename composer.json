@@ -6,7 +6,6 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "firebase/php-jwt": "^5.0",
-        "ramsey/uuid": "^3.8",
         "sensio/framework-extra-bundle": "^5.4",
         "symfony/console": "4.3.*",
         "symfony/dotenv": "4.3.*",

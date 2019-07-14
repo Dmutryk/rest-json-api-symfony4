@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Util;
+namespace App\Helpers;
 
 use Firebase\JWT\JWT;
 use stdClass;
 
-class JwtUtil implements JwtUtilInterface
+class JwtHelper implements JwtHelperInterface
 {
     /**
      * @var string
@@ -25,7 +25,7 @@ class JwtUtil implements JwtUtilInterface
     private $jwtPublicKey;
 
     /**
-     * JwtUtil constructor.
+     * JwtHelper constructor.
      *
      * @param string $jwtAlgorithm
      * @param string $jwtPrivateKey
@@ -52,7 +52,7 @@ class JwtUtil implements JwtUtilInterface
 
     /**
      * @param string $tokenString
-     * @return \stdClass
+     * @return stdClass
      */
     public function decode(string $tokenString): stdClass
     {

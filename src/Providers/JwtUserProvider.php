@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Security;
+namespace App\Providers;
 
 use App\Entity\User;
 use App\Repository\UserRepositoryInterface;
@@ -13,14 +13,13 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 class JwtUserProvider implements UserProviderInterface
 {
     /**
-     * @var \App\Repository\UserRepositoryInterface
+     * @var UserRepositoryInterface
      */
     private $userRepository;
 
     /**
      * JwtUserProvider constructor.
-     *
-     * @param \App\Repository\UserRepositoryInterface $userRepository
+     * @param UserRepositoryInterface $userRepository
      */
     public function __construct(UserRepositoryInterface $userRepository)
     {
@@ -28,17 +27,17 @@ class JwtUserProvider implements UserProviderInterface
     }
 
     /**
-     * @param string $id
-     * @return \App\Entity\User|\Symfony\Component\Security\Core\User\UserInterface|null
+     * @param string $name
+     * @return User|UserInterface|null
      */
-    public function loadUserByUsername($id)
+    public function loadUserByUsername($name)
     {
-        return $this->userRepository->findOneActiveById($id);
+        return $this->userRepository->findOneActiveByUsername($name);
     }
 
     /**
-     * @param \Symfony\Component\Security\Core\User\UserInterface $user
-     * @return \Symfony\Component\Security\Core\User\UserInterface|void
+     * @param UserInterface $user
+     * @return UserInterface|void
      */
     public function refreshUser(UserInterface $user)
     {

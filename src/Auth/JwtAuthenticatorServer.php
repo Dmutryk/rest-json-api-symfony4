@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Security;
+namespace App\Auth;
 
 use App\Entity\User;
-use App\Util\JwtUtilInterface;
+use App\Helpers\JwtHelperInterface;
+use App\Repository\TokenRepository;
 use DateTime;
 use Exception;
 use InvalidArgumentException;
@@ -20,21 +21,27 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\SimplePreAuthenticatorInterface;
 
-class JwtUserAuthenticator implements SimplePreAuthenticatorInterface, AuthenticationFailureHandlerInterface
+class JwtAuthenticatorServer implements SimplePreAuthenticatorInterface, AuthenticationFailureHandlerInterface
 {
     /**
-     * @var \App\Util\JwtUtilInterface
+     * @var \App\Helpers\JwtHelperInterface
      */
-    private $jwtUtil;
+    private $jwtHelper;
 
     /**
-     * JwtUserAuthenticator constructor.
-     *
-     * @param \App\Util\JwtUtilInterface $jwtUtil
+     * @var TokenRepository
      */
-    public function __construct(JwtUtilInterface $jwtUtil)
+    private $tokenRepository;
+    /**
+     * JwtAuthenticatorServer constructor.
+     *
+     * @param \App\Helpers\JwtHelperInterface $jwtHelper
+     * @param TokenRepository $tokenRepository
+     */
+    public function __construct(JwtHelperInterface $jwtHelper, TokenRepository $tokenRepository)
     {
-        $this->jwtUtil = $jwtUtil;
+        $this->jwtHelper = $jwtHelper;
+        $this->tokenRepository = $tokenRepository;
     }
 
     /**
@@ -71,13 +78,13 @@ class JwtUserAuthenticator implements SimplePreAuthenticatorInterface, Authentic
      */
     public function authenticateToken(TokenInterface $token, UserProviderInterface $userProvider, $providerKey)
     {
-        if (!$userProvider instanceof JwtUserProvider) {
+        if (!$userProvider instanceof UserProviderInterface) {
             throw new InvalidArgumentException('Invalid provider.');
         }
 
         $tokenData = $this->validateToken($token);
 
-        $user = $userProvider->loadUserByUsername($tokenData->user->id);
+        $user = $userProvider->loadUserByUsername($tokenData->user->name);
         if (!$user instanceof User) {
             throw new CustomUserMessageAuthenticationException('User not found.');
         }
@@ -96,17 +103,6 @@ class JwtUserAuthenticator implements SimplePreAuthenticatorInterface, Authentic
     }
 
     /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token
-     * @param $providerKey
-     * @return null
-     */
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
-    {
-        return null;
-    }
-
-    /**
      * @param \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token
      * @return \stdClass
      * @throws \Exception
@@ -119,9 +115,19 @@ class JwtUserAuthenticator implements SimplePreAuthenticatorInterface, Authentic
         }
 
         try {
-            $tokenData = $this->jwtUtil->decode($matches[1]);
+            $tokenData = $this->jwtHelper->decode($matches[1]);
         } catch (Exception $e) {
             throw new CustomUserMessageAuthenticationException('Invalid token.');
+        }
+
+        $isTokenExist = $this->tokenRepository->findById($tokenData->id);
+        if (!$isTokenExist) {
+            throw new CustomUserMessageAuthenticationException('Not existed token.');
+        }
+
+        $isRefreshToken = $tokenData->token_id ?? false;
+        if ($isRefreshToken) {
+            throw new CustomUserMessageAuthenticationException('Use general token instead of refresh.');
         }
 
         $expiresAt = new DateTime($tokenData->expires_at);

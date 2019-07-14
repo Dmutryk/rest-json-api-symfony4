@@ -14,7 +14,17 @@ services:
     factory: ['@doctrine.orm.entity_manager', getRepository]
     arguments:
       - App\Entity\User
+      -
+  app.entity_repository.token:
+    class: Doctrine\ORM\EntityRepository
+    factory: ['@doctrine.orm.entity_manager', getRepository]
+    arguments:
+      - App\Entity\Token
 
   App\Repository\UserRepository:
     arguments:
       $entityRepository: '@app.entity_repository.user'
+
+  App\Repository\TokenRepository:
+    arguments:
+      $entityRepository: '@app.entity_repository.token'

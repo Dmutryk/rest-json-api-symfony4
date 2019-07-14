@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Security;
+namespace App\Auth;
 
-use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Exception\TokenNotFoundException;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class JwtUser implements JwtUserInterface
 {
@@ -27,12 +27,12 @@ class JwtUser implements JwtUserInterface
     }
 
     /**
-     * @return \App\Entity\User
+     * @return UserInterface
      */
-    public function get(): User
+    public function get(): UserInterface
     {
         $user = $this->tokenStorage->getToken()->getUser();
-        if (!$user instanceof User) {
+        if (!$user instanceof UserInterface) {
             throw new TokenNotFoundException('User not found.');
         }
 

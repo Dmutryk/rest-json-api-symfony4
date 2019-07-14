@@ -7,7 +7,6 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -55,7 +54,7 @@ class User implements UserInterface
 
     public function __construct()
     {
-        $this->id = Uuid::uuid4()->toString();
+        $this->id = uniqid();
         $this->tokens = new ArrayCollection();
     }
 

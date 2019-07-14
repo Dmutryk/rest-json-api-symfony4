@@ -11,12 +11,12 @@ security:
 
   providers:
     jwt_user_provider:
-      id: App\Security\JwtUserProvider
+      id: App\Providers\JwtUserProvider
 
   firewalls:
     jwt:
       pattern: ^/api
       stateless: true
       simple_preauth:
-        authenticator: App\Security\JwtUserAuthenticator
+        authenticator: App\Auth\JwtAuthenticatorServer
       provider: jwt_user_provider

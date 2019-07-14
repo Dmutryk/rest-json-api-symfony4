@@ -6,5 +6,5 @@ services:
     autoconfigure: true
     public: false
 
-  App\Security\:
-    resource: '../../src/Security'
+  App\Auth\:
+    resource: '../../src/Auth'

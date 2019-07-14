@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Util;
+namespace App\Helpers;
 
 use stdClass;
 
-interface JwtUtilInterface
+interface JwtHelperInterface
 {
     /**
      * @param iterable $tokenData
@@ -16,7 +16,7 @@ interface JwtUtilInterface
 
     /**
      * @param string $tokenString
-     * @return \stdClass
+     * @return stdClass
      */
     public function decode(string $tokenString): stdClass;
 }
