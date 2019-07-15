@@ -11,6 +11,6 @@
 ###> symfony/web-server-bundle ###
 /.web-server-pid
 ###< symfony/web-server-bundle ###
-id_rsa_jwt.pem
-id_rsa_jwt.pub
+rsa_256.pem
+rsa_256.pub
 .env
